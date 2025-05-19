@@ -70,6 +70,10 @@ dependencies:
   flutter_markdown: ^0.6.17  # Markdown rendering for notes
   intl: ^0.18.1            # Internationalization and formatting
 
+  geocoding: ^2.1.0             # For converting coordinates to addresses
+  flutter_map: ^6.0.1           # Alternative to Google Maps (OpenStreetMap-based)
+  latlong2: ^0.9.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

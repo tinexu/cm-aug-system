@@ -59,7 +59,7 @@ class MemoryDetailScreen extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              '${memory.createdAt.day}/${memory.createdAt.month}/${memory.createdAt.year} ${memory.createdAt.hour}:${memory.createdAt.minute.toString().padLeft(2, '0')}',
+              '${memory.createdAt.month}/${memory.createdAt.day}/${memory.createdAt.year} ${memory.createdAt.hour}:${memory.createdAt.minute.toString().padLeft(2, '0')}',
               style: TextStyle(color: Colors.grey),
             ),
             if (memory.latitude != null && memory.longitude != null)
