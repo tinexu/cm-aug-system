@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../models/memory_item.dart';
-import '../providers/memory_provider.dart';
+import 'package:provider/provider.dart';
+import '../providers/memory_provider_updated.dart';
 
 class MemoryDetailScreen extends StatelessWidget {
   final MemoryItem memory;
@@ -14,42 +14,49 @@ class MemoryDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Memory Details'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.delete),
+          // In your memory list item or memory detail screen
+IconButton(
+  icon: Icon(Icons.delete),
+  onPressed: () {
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Delete Memory'),
+        content: Text('Are you sure you want to delete this memory?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          TextButton(
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title: Text('Delete Memory'),
-                  content: Text('Are you sure you want to delete this memory?'),
-                  actions: [
-                    TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(ctx).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: Text('Delete'),
-                      onPressed: () {
-                        Provider.of<MemoryProvider>(context, listen: false)
-                            .deleteMemory(memory.id);
-                        Navigator.of(ctx).pop();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              );
+              Navigator.pop(context); // Close dialog
+              
+              // Delete memory
+              Provider.of<MemoryProvider>(context, listen: false)
+                  .deleteMemory(memory.id);
+              
+              // If in detail view, close it
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
             },
+            child: Text('Delete'),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+    );
+  },
+),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Title
             Text(
               memory.title,
               style: TextStyle(
@@ -57,30 +64,64 @@ class MemoryDetailScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 16),
+            
+            // Date and time
             Text(
-              '${memory.createdAt.month}/${memory.createdAt.day}/${memory.createdAt.year} ${memory.createdAt.hour}:${memory.createdAt.minute.toString().padLeft(2, '0')}',
+              'Created on: ${_formatDate(memory.createdAt)}',
               style: TextStyle(color: Colors.grey),
             ),
-            if (memory.latitude != null && memory.longitude != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  'Location: ${memory.latitude!.toStringAsFixed(6)}, ${memory.longitude!.toStringAsFixed(6)}',
-                  style: TextStyle(color: Colors.blue),
-                ),
+            SizedBox(height: 24),
+            
+            // Content
+            Container(
+              padding: EdgeInsets.all(16),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
               ),
-            Divider(height: 32),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  memory.content,
-                  style: TextStyle(fontSize: 16),
-                ),
+              child: Text(
+                memory.content,
+                style: TextStyle(fontSize: 16),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+  
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+  }
+  
+  void _confirmDelete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Delete Memory'),
+        content: Text('Are you sure you want to delete this memory?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              // Delete the memory
+              Provider.of<MemoryProvider>(context, listen: false)
+                  .deleteMemory(memory.id);
+              
+              // Close dialog and go back to home screen
+              Navigator.of(ctx).pop();
+              Navigator.of(context).pop();
+            },
+            child: Text('Delete'),
+          ),
+        ],
       ),
     );
   }

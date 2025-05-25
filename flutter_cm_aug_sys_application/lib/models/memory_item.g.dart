@@ -21,10 +21,10 @@ class MemoryItemAdapter extends TypeAdapter<MemoryItem> {
       title: fields[1] as String,
       content: fields[2] as String,
       createdAt: fields[3] as DateTime?,
-      latitude: fields[4] as double?,
-      longitude: fields[5] as double?,
-      locationName: fields[6] as String?,
-      tags: (fields[7] as List?)?.cast<String>(),
+      tags: (fields[4] as List?)?.cast<String>(),
+      latitude: fields[5] as double?,
+      longitude: fields[6] as double?,
+      locationName: fields[7] as String?,
     );
   }
 
@@ -41,13 +41,13 @@ class MemoryItemAdapter extends TypeAdapter<MemoryItem> {
       ..writeByte(3)
       ..write(obj.createdAt)
       ..writeByte(4)
-      ..write(obj.latitude)
+      ..write(obj.tags)
       ..writeByte(5)
-      ..write(obj.longitude)
+      ..write(obj.latitude)
       ..writeByte(6)
-      ..write(obj.locationName)
+      ..write(obj.longitude)
       ..writeByte(7)
-      ..write(obj.tags);
+      ..write(obj.locationName);
   }
 
   @override

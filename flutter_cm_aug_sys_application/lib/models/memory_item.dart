@@ -18,26 +18,26 @@ class MemoryItem {
   DateTime createdAt;
   
   @HiveField(4)
-  double? latitude;
+  List<String> tags;
   
   @HiveField(5)
-  double? longitude;
+  double? latitude;
   
   @HiveField(6)
-  String? locationName;
+  double? longitude;
   
   @HiveField(7)
-  List<String> tags;
+  String? locationName;
   
   MemoryItem({
     String? id,
     required this.title,
     required this.content,
     DateTime? createdAt,
+    List<String>? tags,
     this.latitude,
     this.longitude,
     this.locationName,
-    List<String>? tags,
   }) : 
     id = id ?? const Uuid().v4(),
     createdAt = createdAt ?? DateTime.now(),
